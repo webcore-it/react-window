@@ -264,7 +264,7 @@ export default function createListComponent({
               case 'negative':
                 outerRef.scrollLeft = -scrollOffset;
                 break;
-              case 'reverse':
+              case 'positive-ascending':
                 outerRef.scrollLeft = scrollOffset;
                 break;
               default:
@@ -550,7 +550,7 @@ export default function createListComponent({
             case 'negative':
               scrollOffset = -scrollLeft;
               break;
-            case 'default':
+            case 'positive-descending':
               scrollOffset = scrollWidth - clientWidth - scrollLeft;
               break;
           }
