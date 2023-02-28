@@ -290,7 +290,7 @@ describe('FixedSizeList', () => {
     });
   });
 
-  describe('overscanCount', () => {
+  describe('overscanCount and trailingOverscanCount', () => {
     it('should require a minimum of 1 overscan to support tabbing', () => {
       ReactTestRenderer.create(
         <FixedSizeList
@@ -302,17 +302,18 @@ describe('FixedSizeList', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
-    it('should overscan in the direction being scrolled', () => {
+    it('should overscan "overscanCount" in the direction being scrolled and "trailingOverscanCount" in the opposite direction', () => {
       const instance = ReactDOM.render(
         <FixedSizeList
           {...defaultProps}
           initialScrollOffset={50}
-          overscanCount={2}
+          overscanCount={5}
+          trailingOverscanCount={2}
         />,
         document.createElement('div')
       );
       // Simulate scrolling (rather than using scrollTo) to test isScrolling state.
-      simulateScroll(instance, 100);
+      simulateScroll(instance, 200);
       simulateScroll(instance, 50);
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
@@ -332,6 +333,32 @@ describe('FixedSizeList', () => {
           overscanCount={3}
         />
       );
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should ignore "trailingOverscanCount" when not scrolling', () => {
+      ReactTestRenderer.create(
+        <FixedSizeList
+          {...defaultProps}
+          initialScrollOffset={100}
+          overscanCount={3}
+          trailingOverscanCount={2}
+        />
+      );
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should cap "trailingOverscanCount" to "overscanCount"', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          initialScrollOffset={50}
+          overscanCount={3}
+          trailingOverscanCount={5}
+        />,
+        document.createElement('div')
+      );
+      simulateScroll(instance, 200);
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
